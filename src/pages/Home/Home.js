@@ -33,6 +33,8 @@ function Home() {
   const [markerArray, setMarkerArray] = useState([]);
   const [currPostal, setCurrPostal] = useState("");
 
+  const [validationMessage, setValidationMessage] = useState("");
+
   const handleSubmitPostal = () => {
     const appendedPostal = "Singapore " + currPostal;
     const key = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
@@ -50,12 +52,16 @@ function Home() {
         }
       })
       .then((data) => {
-        console.log(data);
-        const json = {
-          lat: data.results[0].geometry.location.lat,
-          lng: data.results[0].geometry.location.lng,
-        };
-        setMarkerArray([json]);
+        if (data.results[0].address_components[0].types[0] == "postal_code") {
+          const json = {
+            lat: data.results[0].geometry.location.lat,
+            lng: data.results[0].geometry.location.lng,
+          };
+          setValidationMessage("");
+          setMarkerArray([json]);
+        } else {
+          setValidationMessage("Not a valid postal code");
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -81,6 +87,12 @@ function Home() {
                   value={currPostal}
                   onChange={(e) => setCurrPostal(e.target.value)}
                 />
+                {validationMessage && (
+                  <Form.Label className={styles.validationMessage}>
+                    {" "}
+                    {validationMessage}{" "}
+                  </Form.Label>
+                )}
               </Col>
               <Col md="1">
                 <Button onClick={handleSubmitPostal}> Search</Button>
@@ -89,6 +101,7 @@ function Home() {
             </Row>
           </Form>
           {/* <Wrapper> */}
+
           <Row>
             <Col xs="4"></Col>
             <Col xs="4">

@@ -25,10 +25,14 @@ export const AuthContextProvider = (props) => {
   //   console.log(setAccountDetails);
   // };
 
+  const [loginIsLoading, setLoginIsLoading] = useState(false);
+  const [createIsLoading, setCreateIsLoading] = useState(false);
+
   const fetchData = (username) => {
     if (!username) {
       return;
     }
+    setLoginIsLoading(true);
     const base = {
       name: username,
     };
@@ -70,6 +74,7 @@ export const AuthContextProvider = (props) => {
         setAccountDetails(json);
         localStorage.setItem("accountDetails", JSON.stringify(json));
         // setAuthIsLoading(false);
+        setLoginIsLoading(false);
 
         console.log("Successfully refreshed!");
       })
@@ -82,6 +87,7 @@ export const AuthContextProvider = (props) => {
     if (!username) {
       return;
     }
+    setCreateIsLoading(true);
     const base = {
       name: username,
     };
@@ -123,7 +129,7 @@ export const AuthContextProvider = (props) => {
         setAccountDetails(json);
         localStorage.setItem("accountDetails", JSON.stringify(json));
         // setAuthIsLoading(false);
-
+        setCreateIsLoading(false);
         console.log("Successfully refreshed!");
       })
       .catch((err) => {
@@ -159,6 +165,8 @@ export const AuthContextProvider = (props) => {
   const contextValue = {
     accountDetails: accountDetails,
     isLoggedIn: userIsLoggedIn,
+    loginIsLoading: loginIsLoading,
+    createIsLoading: createIsLoading,
     // authIsLoading: authIsLoading,
     // isDataFetched: dataFetched,
     // login: loginHandler,
@@ -167,6 +175,7 @@ export const AuthContextProvider = (props) => {
     fetchData: fetchData,
     logoutHandler: logoutHandler,
     createAccount: createAccount,
+    setAccountDetails: setAccountDetails,
     // optionState: optionState,
     // setOptionState: setOptionState,
   };

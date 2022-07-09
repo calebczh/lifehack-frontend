@@ -25,3 +25,8 @@
 /* .labels {
   display: flex;
 } */
+
+.validationMessage {
+  display: flex;
+  color: red;
+}

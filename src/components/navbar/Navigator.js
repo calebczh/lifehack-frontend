@@ -1,6 +1,5 @@
 import { React, useContext, useState } from "react";
-import logo from "../../images/logo.png";
-import imageAvatar from "../../images/img_avatar.png";
+
 import AuthContext from "../../store/AuthContext";
 // import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -19,6 +18,7 @@ import {
   Image,
   Popover,
   Modal,
+  Spinner,
 } from "react-bootstrap";
 
 function Navigator() {
@@ -65,7 +65,9 @@ function Navigator() {
   const popover = (
     <Popover id="popover-basic">
       <Popover.Header as="h3">Your Profile</Popover.Header>
-      <Popover.Body>Your current points :</Popover.Body>
+      <Popover.Body>
+        Your current points : {authCtx.accountDetails.points}
+      </Popover.Body>
     </Popover>
   );
 
@@ -133,9 +135,13 @@ function Navigator() {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={handleCreateAccount}>
-            Create account
-          </Button>
+          {authCtx.createIsLoading ? (
+            <Spinner variant="primary" animation="border" role="status" />
+          ) : (
+            <Button variant="primary" onClick={handleCreateAccount}>
+              Create account
+            </Button>
+          )}
         </Modal.Footer>
       </Modal>
 
@@ -153,9 +159,13 @@ function Navigator() {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={handleLogin}>
-            Login
-          </Button>
+          {authCtx.loginIsLoading ? (
+            <Spinner variant="primary" animation="border" role="status" />
+          ) : (
+            <Button variant="primary" onClick={handleLogin}>
+              Login
+            </Button>
+          )}
         </Modal.Footer>
       </Modal>
     </Navbar>
