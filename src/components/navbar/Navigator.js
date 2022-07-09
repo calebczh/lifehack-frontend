@@ -1,6 +1,4 @@
 import { React, useContext, useState } from "react";
-import logo from "../../images/logo.png";
-import imageAvatar from "../../images/img_avatar.png";
 import AuthContext from "../../store/AuthContext";
 // import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
