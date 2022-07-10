@@ -2,7 +2,7 @@
 
 ## Guide
 
-### `npm test`
+### `npm install`
 
 Installs all dependences listed in package.json
 
