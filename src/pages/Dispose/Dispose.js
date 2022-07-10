@@ -25,7 +25,7 @@ function Dispose() {
       authCtx.accountDetails.points + currWeight / 10
     );
 
-    const url = "https://infinite-sands-60018.herokuapp.com/user/";
+    const url = "http://127.0.0.1:8000/user/";
     const base = {
       name: authCtx.accountDetails.name,
       points: newPoints,

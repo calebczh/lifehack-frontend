@@ -40,7 +40,7 @@ export const AuthContextProvider = (props) => {
     const base = {
       name: username,
     };
-    const url = "https://infinite-sands-60018.herokuapp.com/user/";
+    const url = "http://127.0.0.1:8000/user/";
     setDataFetched(true);
     // setAuthIsLoading(true);
     return fetch(url, {
@@ -90,7 +90,7 @@ export const AuthContextProvider = (props) => {
     const base = {
       name: username,
     };
-    const url = "https://infinite-sands-60018.herokuapp.com/new/";
+    const url = "http://127.0.0.1:8000/new/";
     setDataFetched(true);
     // setAuthIsLoading(true);
     return fetch(url, {
