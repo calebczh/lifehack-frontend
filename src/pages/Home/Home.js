@@ -52,7 +52,7 @@ function Home() {
         }
       })
       .then((data) => {
-        if (data.results[0].address_components[0].types[0] == "postal_code") {
+        if (data.results[0].address_components[0].types[0] === "postal_code") {
           const json = {
             lat: data.results[0].geometry.location.lat,
             lng: data.results[0].geometry.location.lng,

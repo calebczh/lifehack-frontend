@@ -33,7 +33,7 @@ function Classify() {
 
     setLoading(true);
 
-    const url = "";
+    const url = "http://127.0.0.1:8000/upload/";
     fetch(url, {
       method: "PUT",
       body: formData,
@@ -58,9 +58,11 @@ function Classify() {
         }
       })
       .then((data) => {
-        setOriginalImage(data.originalImageURL);
-        setProcessedImage(data.processedImageURL);
-        window.location.reload();
+        // console.log(data);
+        setOriginalImage(data.original_image_url);
+        setProcessedImage(data.processed_image_url);
+        // window.location.reload();
+        setLoading(false);
       })
       .catch((err) => {
         alert(err.message);

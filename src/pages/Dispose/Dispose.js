@@ -25,7 +25,7 @@ function Dispose() {
       authCtx.accountDetails.points + currWeight / 10
     );
 
-    const url = "https://lit-beyond-29823.herokuapp.com/user/";
+    const url = "https://infinite-sands-60018.herokuapp.com/user/";
     const base = {
       name: authCtx.accountDetails.name,
       points: newPoints,
