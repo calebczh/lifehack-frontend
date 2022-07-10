@@ -105,18 +105,30 @@ function Dispose() {
                 <Form.Label>Current Points</Form.Label>
                 <p className="py-2"> {authCtx.accountDetails.points}</p>
               </Col>
-
               <Col xs lg="1"></Col>
             </Row>
           </Form>
 
           <Row className="justify-content-md-center">
             <Col xs lg="1"></Col>
-            <Col md="3">
+
+            <Col xs lg="1"></Col>
+          </Row>
+
+          <Row className="justify-content-md-center">
+            <Col xs lg="1"></Col>
+
+            <Col md="2">
               {isLoading ? (
                 <Spinner variant="primary" animation="border" role="status" />
               ) : (
-                <Button onClick={handleDisposeTrash}> Dispose Trash</Button>
+                <Button
+                  onClick={handleDisposeTrash}
+                  disabled={authCtx.closestBins.length === 0}
+                >
+                  {" "}
+                  Dispose Trash
+                </Button>
               )}
             </Col>
 

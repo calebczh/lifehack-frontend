@@ -17,6 +17,8 @@ export const AuthContextProvider = (props) => {
   // const [username, setUserNameToken] = useState(accountDetails);
   const [accountDetails, setAccountDetails] = useState(accountJson);
 
+  const [closestBins, setClosestBins] = useState([]);
+
   //   const [authIsLoading, setAuthIsLoading] = useState(false);
   const [dataFetched, setDataFetched] = useState(false);
   // const fetchData = (username) => {
@@ -28,7 +30,9 @@ export const AuthContextProvider = (props) => {
   const [loginIsLoading, setLoginIsLoading] = useState(false);
   const [createIsLoading, setCreateIsLoading] = useState(false);
 
-  const fetchData = (username) => {
+  // const [loginErrorMessage, setLoginErrorMessage] = useState("");
+
+  const fetchData = async (username) => {
     if (!username) {
       return;
     }
@@ -39,7 +43,7 @@ export const AuthContextProvider = (props) => {
     const url = "https://lit-beyond-29823.herokuapp.com/user/";
     setDataFetched(true);
     // setAuthIsLoading(true);
-    fetch(url, {
+    return fetch(url, {
       method: "POST",
       body: JSON.stringify(base),
       headers: {
@@ -51,14 +55,8 @@ export const AuthContextProvider = (props) => {
           return res.json();
         } else {
           return res.json().then((data) => {
-            let errorMessage; // = 'Authentication failed!';
-            console.log(JSON.stringify(data));
-            if (data && data.error && data.error.message) {
-              errorMessage = data.error.message;
-            }
-            console.log(errorMessage);
-
-            throw new Error(errorMessage);
+            console.log(data);
+            // setLoginErrorMessage("Username does not exist");
           });
         }
       })
@@ -79,11 +77,12 @@ export const AuthContextProvider = (props) => {
         console.log("Successfully refreshed!");
       })
       .catch((err) => {
-        alert(err.message);
+        setLoginIsLoading(false);
+        throw new Error(err);
       });
   };
 
-  const createAccount = (username) => {
+  const createAccount = async (username) => {
     if (!username) {
       return;
     }
@@ -94,7 +93,7 @@ export const AuthContextProvider = (props) => {
     const url = "https://lit-beyond-29823.herokuapp.com/new/";
     setDataFetched(true);
     // setAuthIsLoading(true);
-    fetch(url, {
+    return fetch(url, {
       method: "POST",
       body: JSON.stringify(base),
       headers: {
@@ -106,14 +105,7 @@ export const AuthContextProvider = (props) => {
           return res.json();
         } else {
           return res.json().then((data) => {
-            let errorMessage; // = 'Authentication failed!';
-            console.log(JSON.stringify(data));
-            if (data && data.error && data.error.message) {
-              errorMessage = data.error.message;
-            }
-            console.log(errorMessage);
-
-            throw new Error(errorMessage);
+            console.log(data);
           });
         }
       })
@@ -133,7 +125,8 @@ export const AuthContextProvider = (props) => {
         console.log("Successfully refreshed!");
       })
       .catch((err) => {
-        alert(err.message);
+        setCreateIsLoading(false);
+        throw new Error(err);
       });
   };
 
@@ -167,11 +160,14 @@ export const AuthContextProvider = (props) => {
     isLoggedIn: userIsLoggedIn,
     loginIsLoading: loginIsLoading,
     createIsLoading: createIsLoading,
+    closestBins: closestBins,
+    // loginErrorMessage: loginErrorMessage,
     // authIsLoading: authIsLoading,
     // isDataFetched: dataFetched,
     // login: loginHandler,
     // // datalog: loginData,
     // logout: logoutHandler,
+    setClosestBins: setClosestBins,
     fetchData: fetchData,
     logoutHandler: logoutHandler,
     createAccount: createAccount,

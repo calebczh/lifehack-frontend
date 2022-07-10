@@ -35,6 +35,49 @@ function Home() {
 
   const [validationMessage, setValidationMessage] = useState("");
 
+  function calculatePoints(target) {
+    function distance(lat1, lat2, lon1, lon2) {
+      // The math module contains a function
+      // named toRadians which converts from
+      // degrees to radians.
+      lon1 = (lon1 * Math.PI) / 180;
+      lon2 = (lon2 * Math.PI) / 180;
+      lat1 = (lat1 * Math.PI) / 180;
+      lat2 = (lat2 * Math.PI) / 180;
+
+      // Haversine formula
+      let dlon = lon2 - lon1;
+      let dlat = lat2 - lat1;
+      let a =
+        Math.pow(Math.sin(dlat / 2), 2) +
+        Math.cos(lat1) * Math.cos(lat2) * Math.pow(Math.sin(dlon / 2), 2);
+
+      let c = 2 * Math.asin(Math.sqrt(a));
+
+      // Radius of earth in kilometers. Use 3956
+      // for miles
+      let r = 6371;
+
+      // calculate the result
+      return c * r;
+    }
+    const jsonData = require("../../store/busstop.json");
+    let arrayOfPoints = jsonData.value.map((data) => {
+      return {
+        lat: data.Latitude,
+        lng: data.Longitude,
+      };
+    });
+
+    arrayOfPoints = arrayOfPoints.filter((coord) => {
+      return target
+        ? distance(coord.lat, target.lat, coord.lng, target.lng) < 0.5
+        : false;
+    });
+
+    return arrayOfPoints;
+  }
+
   const handleSubmitPostal = () => {
     const appendedPostal = "Singapore " + currPostal;
     const key = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
@@ -57,6 +100,7 @@ function Home() {
             lat: data.results[0].geometry.location.lat,
             lng: data.results[0].geometry.location.lng,
           };
+          authCtx.setClosestBins(calculatePoints(json));
           setValidationMessage("");
           setMarkerArray([json]);
         } else {

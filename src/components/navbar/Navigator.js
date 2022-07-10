@@ -2,8 +2,8 @@ import { React, useContext, useState } from "react";
 
 import AuthContext from "../../store/AuthContext";
 // import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
-
+import { NavLink } from "react-router-dom";
+import styles from "./Navigator.module.css";
 import {
   Nav,
   Navbar,
@@ -20,6 +20,7 @@ import {
   Modal,
   Spinner,
 } from "react-bootstrap";
+import styled from "styled-components";
 
 function Navigator() {
   const authCtx = useContext(AuthContext);
@@ -43,9 +44,16 @@ function Navigator() {
   const handleOpenLogin = () => setShowLogin(true);
   const [currLogin, setCurrLogin] = useState("");
 
-  const handleLogin = () => {
-    authCtx.fetchData(currLogin);
-    setShowLogin(false);
+  const [loginErrorMessage, setLoginErrorMessage] = useState("");
+
+  const handleLogin = async () => {
+    try {
+      await authCtx.fetchData(currLogin);
+      setShowLogin(false);
+    } catch (e) {
+      console.log(e);
+      setLoginErrorMessage("Username does not exist");
+    }
   };
 
   const [showCreateAccount, setShowCreateAccount] = useState(false);
@@ -53,10 +61,15 @@ function Navigator() {
   const handleOpenCreate = () => setShowCreateAccount(true);
   const [currAccount, setCurrAccount] = useState("");
 
-  const handleCreateAccount = () => {
-    console.log(currAccount);
-    authCtx.createAccount(currAccount);
-    setShowCreateAccount(false);
+  const [createErrorMessage, setCreateErrorMessage] = useState("");
+  const handleCreateAccount = async () => {
+    try {
+      await authCtx.createAccount(currAccount);
+      setShowCreateAccount(false);
+    } catch (e) {
+      console.log(e);
+      setCreateErrorMessage("Username already exists!");
+    }
   };
 
   const handleLogout = () => {
@@ -71,6 +84,17 @@ function Navigator() {
     </Popover>
   );
 
+  const StyledNavLink = styled(NavLink)`
+    text-emphasis: none;
+    text-decoration: none;
+    color: black;
+    &:hover {
+      text-emphasis: none;
+      text-decoration: none;
+      color: grey;
+    }
+  `;
+
   return (
     <Navbar style={navbar} variant="light" expand="lg">
       <Container>
@@ -79,10 +103,10 @@ function Navigator() {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             <Stack direction="horizontal" gap={3}>
-              <Nav.Link href="/">Home</Nav.Link>
-              <Nav.Link href="/Image">Classify</Nav.Link>
+              <StyledNavLink to="/">Home</StyledNavLink>
+              <StyledNavLink to="/Image">Classify</StyledNavLink>
               {authCtx.isLoggedIn && (
-                <Nav.Link href="/Dispose">Dispose</Nav.Link>
+                <StyledNavLink to="/Dispose">Dispose</StyledNavLink>
               )}
             </Stack>
           </Nav>
@@ -135,6 +159,10 @@ function Navigator() {
           </Form>
         </Modal.Body>
         <Modal.Footer>
+          {createErrorMessage && (
+            <p className={styles.errorMessage}> {createErrorMessage} </p>
+          )}
+
           {authCtx.createIsLoading ? (
             <Spinner variant="primary" animation="border" role="status" />
           ) : (
@@ -159,6 +187,9 @@ function Navigator() {
           </Form>
         </Modal.Body>
         <Modal.Footer>
+          {loginErrorMessage && (
+            <p className={styles.errorMessage}> {loginErrorMessage} </p>
+          )}
           {authCtx.loginIsLoading ? (
             <Spinner variant="primary" animation="border" role="status" />
           ) : (
